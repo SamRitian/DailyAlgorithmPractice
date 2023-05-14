@@ -9,42 +9,47 @@ class Solution {
     public int[] searchRange(int[] nums, int target) {
         if (nums == null || nums.length == 0) return new int[]{-1, -1};
 
-        int leftBoarder = getLeftBoarder(nums, target);
-        int rightBoarder = getRightBoarder(nums, target);
+        // int firstIndex = getFirstIndex(nums, target);
+        // int lastIndex = getLastIndex(nums, target);
 
-        if (leftBoarder == -2 || rightBoarder == -2) return new int[]{-1, -1};
-        if (rightBoarder - leftBoarder > 1) return new int[]{leftBoarder + 1, rightBoarder - 1};
-        return new int[]{-1, -1};
+        int firstIndex = getIndex(nums, target, true);
+        int lastIndex = getIndex(nums, target, false);
+
+        if (firstIndex == -1 || lastIndex == -1) {
+            return new int[]{-1, -1};
+        } else if (nums[firstIndex] == target && nums[lastIndex] == target) {
+            return new int[]{firstIndex, lastIndex};
+        } else {
+            return new int[]{-1, -1};
+        }
     }
 
-    private int getLeftBoarder(int[] nums, int target) {
+    private int getIndex(int[] nums, int target, boolean isFirst) {
         int left = 0, right = nums.length - 1;
-        int leftBoarder = -2;
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            if (nums[mid] >= target) {
-                right = mid - 1;
-                leftBoarder = right;
+            if (isFirst) {
+                if (target <= nums[mid]) {
+                    right = mid - 1;
+                } else {
+                    left = mid + 1;
+                }
             } else {
-                left = mid + 1;
+                if (target >= nums[mid]) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
             }
         }
-        return leftBoarder;
-    }
 
-    private int getRightBoarder(int[] nums, int target) {
-        int left = 0, right = nums.length - 1;
-        int rightBoarder = -2;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (nums[mid] <= target) {
-                left = mid + 1;
-                rightBoarder = left;
-            } else {
-                right = mid - 1;
-            }
+        if (isFirst) {
+            if (left < nums.length && target == nums[left]) return left;
+            else return -1;
+        } else {
+            if (right >= 0 && target == nums[right]) return right;
+            else return -1;
         }
-        return rightBoarder;
     }
 }
 // @lc code=end
