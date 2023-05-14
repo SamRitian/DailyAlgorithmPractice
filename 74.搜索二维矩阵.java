@@ -11,45 +11,32 @@ class Solution {
             return false;
         }
         
-        int rows = matrix.length;
-        int cols = matrix[0].length;
-        
-        // Perform binary search on first column to find the row where the target may be present
-        int left = 0;
-        int right = rows - 1;
-        while (left <= right) {
-            int mid = left + (right - left) / 2;
-            if (matrix[mid][0] == target) {
-                return true;
-            } else if (matrix[mid][0] > target) {
-                right = mid - 1;
+        int row = -1;
+        int top = 0, bottom = matrix.length - 1;
+        while (top <= bottom) {
+            int mid = top + (bottom - top) / 2;
+            if (target >= matrix[mid][0]) {
+                top = mid + 1;
             } else {
-                left = mid + 1;
+                bottom = mid - 1;
             }
         }
+        if (bottom >= 0 && matrix[bottom][0] <= target) row = bottom;
+        if (row == -1) return false;
         
-        // If target is not in any row's first column, return false
-        if (right < 0) {
-            return false;
-        }
-        
-        // Perform binary search on the row where the target may be present to find the target
-        int row = right;
-        left = 0;
-        right = cols - 1;
+        int left = 0, right = matrix[row].length - 1;
         while (left <= right) {
             int mid = left + (right - left) / 2;
-            if (matrix[row][mid] == target) {
-                return true;
-            } else if (matrix[row][mid] > target) {
-                right = mid - 1;
-            } else {
-                left = mid + 1;
-            }
+            if (matrix[row][mid] == target) return true;
+            else if (target > matrix[row][mid]) left = mid + 1;
+            else right = mid - 1;
         }
-        
-        // If target is not in the row, return false
+
         return false;
     }
 }
 // @lc code=end
+
+// 1, 10, 23, 32  target = 
+//         b  t
+//            m
