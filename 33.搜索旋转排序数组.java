@@ -20,11 +20,14 @@ class Solution {
                 else right = mid;
             }
         }
-        if (nums[left] == target) return left;
-        if (nums[right] == target) return right;
+
+        if (target == nums[left]) return left;
+        if (target == nums[right]) return right;
 
         return -1;
     }
 }
 // @lc code=end
 
+
+              
